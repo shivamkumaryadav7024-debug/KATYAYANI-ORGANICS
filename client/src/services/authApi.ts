@@ -2,7 +2,6 @@ import api from './api';
 import type { User } from '../types';
 
 interface AuthResponse {
-  token: string;
   user: User;
 }
 
@@ -12,4 +11,7 @@ export const authApi = {
 
   login: (data: { email: string; password: string }) =>
     api.post<AuthResponse>('/auth/login', data).then((r) => r.data),
+
+  logout: () =>
+    api.post('/auth/logout').then((r) => r.data),
 };

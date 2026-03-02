@@ -19,7 +19,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const data = await authApi.register(form);
-      login(data.user, data.token);
+      login(data.user);
       toast.success(`Welcome, ${data.user.name}!`);
       navigate('/');
     } catch (err: unknown) {

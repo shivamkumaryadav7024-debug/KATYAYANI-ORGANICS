@@ -6,12 +6,11 @@ export interface User {
 
 export interface AuthState {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
 }
 
 export type AuthAction =
-  | { type: 'LOGIN'; payload: { user: User; token: string } }
+  | { type: 'LOGIN'; payload: { user: User } }
   | { type: 'LOGOUT' };
 
 export interface Task {

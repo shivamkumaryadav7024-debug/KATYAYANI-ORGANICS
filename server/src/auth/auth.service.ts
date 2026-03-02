@@ -14,6 +14,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private createToken(userId: unknown, email: string): string {
+    return this.jwtService.sign({ sub: userId, email });
+  }
+
   async register(dto: RegisterDto) {
     const existing = await this.userModel.findOne({ email: dto.email });
     if (existing) throw new ConflictException('Email already in use');
@@ -21,8 +25,10 @@ export class AuthService {
     const hashed = await bcrypt.hash(dto.password, 10);
     const user = await this.userModel.create({ ...dto, password: hashed });
 
-    const token = this.jwtService.sign({ sub: user._id, email: user.email });
-    return { token, user: { id: user._id, name: user.name, email: user.email } };
+    return {
+      token: this.createToken(user._id, user.email),
+      user: { id: user._id, name: user.name, email: user.email },
+    };
   }
 
   async login(dto: LoginDto) {
@@ -32,7 +38,9 @@ export class AuthService {
     const valid = await bcrypt.compare(dto.password, user.password);
     if (!valid) throw new UnauthorizedException('Invalid credentials');
 
-    const token = this.jwtService.sign({ sub: user._id, email: user.email });
-    return { token, user: { id: user._id, name: user.name, email: user.email } };
+    return {
+      token: this.createToken(user._id, user.email),
+      user: { id: user._id, name: user.name, email: user.email },
+    };
   }
 }

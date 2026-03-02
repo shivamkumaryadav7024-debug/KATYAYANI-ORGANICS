@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/AuthContext';
 import { useTasks } from '@/hooks/useTasks';
+import { authApi } from '@/services/authApi';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -24,7 +25,7 @@ export default function DashboardPage() {
           <h1 className="text-xl font-semibold">Task Manager</h1>
           <div className="flex items-center gap-3">
             <span className="text-sm text-muted-foreground hidden sm:block">{user?.name}</span>
-            <Button variant="outline" size="sm" onClick={logout}>
+            <Button variant="outline" size="sm" onClick={() => { authApi.logout().finally(logout); }}>
               Sign out
             </Button>
           </div>
